@@ -48,6 +48,27 @@ pipeline{
             }
         }
 
+        stage("SonarQubeAnalysis"){
+            steps{
+                echo "====++++executing Sonarqube Analysis++++===="
+                withSonarQubeEnv('SonarQube') {
+                sh 'mvn sonar:sonar'
+            }
+            }
+            post{
+                always{
+                    echo "====++++always++++===="
+                }
+                success{
+                    echo "====++++Sonarqube Analysis executed successfully++++===="
+                }
+                failure{
+                    echo "====++++Sonarqube Analysis execution failed++++===="
+                }
+       
+            }
+        }
+
         stage("Deploy"){
             steps{
                 echo "========Deploying the Java Project========"
